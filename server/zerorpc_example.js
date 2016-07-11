@@ -14,25 +14,27 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html'); 
 });
 
+var timeFrame = 0.2;
+
 io.on('connection', function(socket) {
     console.log('a user connected');
 
     socket.on('chat message', function(msg) {
         console.log('message: ' + msg);
         if (msg === 'f') {
-	    client.invoke('forward', 1, function(error, res, more) {
+	    client.invoke('forward', tf, function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'b') {
-	    client.invoke('reverse', 1, function(error, res, more) {
+	    client.invoke('reverse', tf, function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'l') {
-	    client.invoke('turn_left', 1, function(error, res, more) {
+	    client.invoke('turn_left', tf, function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'r') {
-	    client.invoke('turn_right', 1, function(error, res, more) {
+	    client.invoke('turn_right', tf, function(error, res, more) {
                 console.log(res);
             });
 	}

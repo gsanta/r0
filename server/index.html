@@ -31,6 +31,26 @@
 	$('#m').val('');
 	return false;
     });
+
+    window.addEventListener("keydown", function(event) {
+	    var keys = {
+	   	left: 37,
+		up: 38,
+		right: 39,
+		down: 40
+	    }
+
+
+	    if (event.keyCode === keys.left) {
+        	socket.emit('chat message', 'l');
+	    } else if (event.keyCode === keys.up) {
+        	socket.emit('chat message', 'f'); 
+	    } else if (event.keyCode === keys.right) {	
+        	socket.emit('chat message', 'r');
+	    } else if (event.keyCode === keys.down) { 
+        	socket.emit('chat message', 'b');
+	    }
+    });
   </script>
   </body>
 </html>
