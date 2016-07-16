@@ -22,19 +22,19 @@ io.on('connection', function(socket) {
     socket.on('chat message', function(msg) {
         console.log('message: ' + msg);
         if (msg === 'f') {
-	    client.invoke('forward', tf, function(error, res, more) {
+	    client.invoke('forward', timeFrame, function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'b') {
-	    client.invoke('reverse', tf, function(error, res, more) {
+	    client.invoke('reverse', timeFrame, function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'l') {
-	    client.invoke('turn_left', tf, function(error, res, more) {
+	    client.invoke('turn_left', timeFrame, function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'r') {
-	    client.invoke('turn_right', tf, function(error, res, more) {
+	    client.invoke('turn_right', timeFrame, function(error, res, more) {
                 console.log(res);
             });
 	}
