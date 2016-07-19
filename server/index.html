@@ -37,7 +37,9 @@
 	   	left: 37,
 		up: 38,
 		right: 39,
-		down: 40
+		down: 40,
+		stop: 83,
+		cleanup: 67
 	    }
 
 
@@ -49,7 +51,12 @@
         	socket.emit('chat message', 'r');
 	    } else if (event.keyCode === keys.down) { 
         	socket.emit('chat message', 'b');
+	    } else if (event.keyCode === keys.stop) {
+	   	socket.emit('chat message', 's');
+	    } else if (event.keyCode === keys.cleanup) {
+	   	socket.emit('chat message', 'cleanup');
 	    }
+
     });
   </script>
   </body>

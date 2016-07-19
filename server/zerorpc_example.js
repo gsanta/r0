@@ -14,7 +14,7 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html'); 
 });
 
-var timeFrame = 0.2;
+var timeFrame = 0.5;
 
 io.on('connection', function(socket) {
     console.log('a user connected');
@@ -22,22 +22,32 @@ io.on('connection', function(socket) {
     socket.on('chat message', function(msg) {
         console.log('message: ' + msg);
         if (msg === 'f') {
-	    client.invoke('forward', timeFrame, function(error, res, more) {
+	    client.invoke('forward', function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'b') {
-	    client.invoke('reverse', timeFrame, function(error, res, more) {
+	    client.invoke('reverse', function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'l') {
-	    client.invoke('turn_left', timeFrame, function(error, res, more) {
+	    client.invoke('turn_left', function(error, res, more) {
                 console.log(res);
             });
 	} else if (msg === 'r') {
-	    client.invoke('turn_right', timeFrame, function(error, res, more) {
+	    client.invoke('turn_right', function(error, res, more) {
+                console.log(res);
+            });
+	} else if (msg === 's') {
+	    client.invoke('stop_motor', function(error, res, more) {
+                console.log(res);
+            });
+	} else if (msg === 'cleanup') {
+	    client.invoke('cleanup', function(error, res, more) {
                 console.log(res);
             });
 	}
+
+
     });
 
     socket.on('disconnect', function() {
