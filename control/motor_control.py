@@ -38,50 +38,51 @@ class MotorPins(object):
 
 class MotorControl(object):
 
-    def __init__(self, motorPins):
+    def __init__(self, motorPins, pwmValues, pwmTimers):
         self.pwm = None
         self.motorPins = motorPins
+        self.pwmValues = pwmValues
+        self.pwmTimers = pwmTimers
         self._init()
 
     def _init(self):
         gpio.setmode(gpio.BOARD)
        # gpio.setup(32, gpio.OUT)
-        print self.motorPins.getPWM() 
         gpio.setup(self.motorPins.getPWM(), gpio.OUT)
         gpio.setup(self.motorPins.getMotorRightReverse(), gpio.OUT)
         gpio.setup(self.motorPins.getMotorRightForward(), gpio.OUT)
         gpio.setup(self.motorPins.getMotorLeftForward(), gpio.OUT)
         gpio.setup(self.motorPins.getMotorLeftReverse(), gpio.OUT)
         self.pwm = gpio.PWM(self.motorPins.getPWM(), 50)
-        self.pwm.start(50)
+        self.pwm.start(self.pwmValues[0])
 
+    def start(self):
+        for i in range(0, len(self.pwmValues)):
+            self.pwm.ChangeDutyCycle(self.pwmValues[i])
+            time.sleep(self.pwmTimers[i])
+    
     def forward(self):
-        gpio.output(self.motorPins.getMotorRightReverse(), False)
-        gpio.output(self.motorPins.getMotorRightForward(), True)
-        gpio.output(self.motorPins.getMotorLeftForward(), True)
-        gpio.output(self.motorPins.getMotorLeftReverse(), False)
+        self.setupPins(True, False, True, False)
+        self.start()
 
     def reverse(self):
-        gpio.output(self.motorPins.getMotorRightReverse(), True)
-        gpio.output(self.motorPins.getMotorRightForward(), False)
-        gpio.output(self.motorPins.getMotorLeftForward(), False)
-        gpio.output(self.motorPins.getMotorLeftReverse(), True)
+        self.setupPins(False, True, False, True)
+        self.start()
 
     def turn_left(self):
-        gpio.output(self.motorPins.getMotorRightReverse(), True)
-        gpio.output(self.motorPins.getMotorRightForward(), False)
-        gpio.output(self.motorPins.getMotorLeftForward(), False)
-        gpio.output(self.motorPins.getMotorLeftReverse(), False)
+        self.setupPins(False, True, False, False)
+        self.start()
 
     def turn_right(self):
-        gpio.output(self.motorPins.getMotorRightReverse(), False)
-        gpio.output(self.motorPins.getMotorRightForward(), False)
-        gpio.output(self.motorPins.getMotorLeftForward(), False)
-        gpio.output(self.motorPins.getMotorLeftReverse(), True)
+        self.setupPins(False, False, False, True)
+        self.start()
 
     def stop_motor(self):
-        gpio.output(self.motorPins.getMotorRightReverse(), False)
-        gpio.output(self.motorPins.getMotorRightForward(), False)
-        gpio.output(self.motorPins.getMotorLeftForward(), False)
-        gpio.output(self.motorPins.getMotorLeftReverse(), False)
+        self.setupPins(False, False, False, False)
+
+    def setupPins(self, mrf, mrr, mlf, mlr):
+        gpio.output(self.motorPins.getMotorRightReverse(), mrr)
+        gpio.output(self.motorPins.getMotorRightForward(), mrf)
+        gpio.output(self.motorPins.getMotorLeftForward(), mlf)
+        gpio.output(self.motorPins.getMotorLeftReverse(), mlr)
 
