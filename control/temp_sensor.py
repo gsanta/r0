@@ -1,12 +1,11 @@
 import RPi.GPIO as GPIO
 import time
 from threading import Thread
-import Queue
+from queue import Queue
 
 class DistanceSensor(Thread):
 
     def __init__(self, trigPin, echoPin, queue):
-        Thread.__init__(self)
         self.trigPin = trigPin
         self.echoPin = echoPin
         self.queue = queue
@@ -34,16 +33,17 @@ class DistanceSensor(Thread):
             distance = pulseDuration * 17150
             distance = round(distance, 2)
             
-            self.queue.put(distance)
+            queue.put(distance)
+            print "Distance: ", distance, "cm"
             time.sleep(0.5)
 
 
 class DistanceSensorWrapper(object):
 
-    def __init__(self, trigPin, echoPin, queue):
+    def __init__(self, trigPin, echoPin):
         self.trigPin = trigPin
         self.echoPin = echoPin
-        self.queue = queue
+        self.queue = Queue()
         self.thread = DistanceSensor(self.trigPin, self.echoPin, self.queue)
         self._setup()
 
@@ -52,5 +52,5 @@ class DistanceSensorWrapper(object):
         GPIO.setup(self.echoPin, GPIO.IN)
 
 
-    def startSensor(self):
+    def startSensor():
         self.thread.start()

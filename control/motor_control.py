@@ -1,5 +1,6 @@
 import RPi.GPIO as gpio
 import time
+import threading
 
 class MotorPins(object):
 
@@ -58,27 +59,39 @@ class MotorControl(object):
 
     def start(self):
         for i in range(0, len(self.pwmValues)):
+            print self.pwmValues[i]
+
             self.pwm.ChangeDutyCycle(self.pwmValues[i])
             time.sleep(self.pwmTimers[i])
     
     def forward(self):
         self.setupPins(True, False, True, False)
-        self.start()
+        self.t = threading.Thread(target=self.start)
+        self.t.start()
+        print 'forward'
+        #self.start()
 
     def reverse(self):
         self.setupPins(False, True, False, True)
-        self.start()
+        self.t = threading.Thread(target=self.start)
+        self.t.start()
+        print 'reverse'
 
     def turn_left(self):
         self.setupPins(False, True, False, False)
-        self.start()
+        self.t = threading.Thread(target=self.start)
+        self.t.start()
+        print 'turn_left'
 
     def turn_right(self):
         self.setupPins(False, False, False, True)
-        self.start()
+        self.t = threading.Thread(target=self.start)
+        self.t.start()
+        print 'turn_right'
 
     def stop_motor(self):
         self.setupPins(False, False, False, False)
+        print 'stop_motor'
 
     def setupPins(self, mrf, mrr, mlf, mlr):
         gpio.output(self.motorPins.getMotorRightReverse(), mrr)
