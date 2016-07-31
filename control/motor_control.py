@@ -99,3 +99,44 @@ class MotorControl(object):
         gpio.output(self.motorPins.getMotorLeftForward(), mlf)
         gpio.output(self.motorPins.getMotorLeftReverse(), mlr)
 
+class MotorControlAutomationWrapper(object):
+
+    def __init__(self, motorControl, motorChannel):
+        self.motorChannel = motorChannel
+        self.thread = MotorControlAutomation(motorControl, motorChannel)
+
+    
+    def start(self):
+        self.thread.start()
+
+
+class MotorControlAutomation(threading.Thread):
+
+    def __init__(self, motorControl, motorChannel):
+        threading.Thread.__init__(self)
+        self.motorControl = motorControl
+        self.motorChannel = motorChannel
+        
+    
+    def run(self):
+
+        while True:
+            time.sleep(2)
+            print 'forward'
+            self.motorControl.forward()
+           
+            message = self.motorChannel.top()
+            if message == 'left':
+                self.motorControl.stop()
+                print 'stop'
+            '''
+            message = self.motorChannel.top()
+            print 'message', message
+            if message == 'left':
+                self.motorControl.stop()
+                print 'stop'
+            self.motorControl.forward()
+            print 'forward'
+            time.sleep(1)
+            
+            '''

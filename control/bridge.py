@@ -7,6 +7,8 @@ import sensor_consumer
 from threading import Thread
 import Queue
 
+motorChannel = sensor_consumer.Channel()
+
 motorPins = motor.MotorPins()
 motorPins.setPWM(12)
 motorPins.setMotorRightForward(11)
@@ -17,10 +19,14 @@ motorControl = motor.MotorControl(motorPins, [30, 40, 45, 50], [0.5, 0.5, 0.5, 0
 trigPin = 16
 echoPin = 18
 
+
+motorControlAutomation = motor.MotorControlAutomationWrapper(motorControl, motorChannel)
+motorControlAutomation.start()
+
 distanceQueue = Queue.Queue()
 distance = distance_sensor.DistanceSensorWrapper(trigPin, echoPin, distanceQueue)
 distance.startSensor()
-sensorDataConsumer = sensor_consumer.SensorDataConsumerWrapper(distanceQueue)
+sensorDataConsumer = sensor_consumer.SensorDataConsumerWrapper(distanceQueue, motorChannel)
 sensorDataConsumer.start()
 
 class HelloRPC(object):
