@@ -20,14 +20,14 @@ trigPin = 16
 echoPin = 18
 
 
-motorControlAutomation = motor.MotorControlAutomationWrapper(motorControl, motorChannel)
-motorControlAutomation.start()
+#motorControlAutomation = motor.MotorControlAutomationWrapper(motorControl, motorChannel)
+#motorControlAutomation.start()
 
 distanceQueue = Queue.Queue()
 distance = distance_sensor.DistanceSensorWrapper(trigPin, echoPin, distanceQueue)
 distance.startSensor()
-sensorDataConsumer = sensor_consumer.SensorDataConsumerWrapper(distanceQueue, motorChannel)
-sensorDataConsumer.start()
+#sensorDataConsumer = sensor_consumer.SensorDataConsumerWrapper(distanceQueue, motorChannel)
+#sensorDataConsumer.start()
 
 class HelloRPC(object):
     def hello(self, name):

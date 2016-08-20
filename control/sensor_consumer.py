@@ -1,5 +1,6 @@
 import Queue
 from threading import Thread
+from motor_control import Direction
 
 class Channel(object):
     
@@ -19,14 +20,20 @@ class SensorDataConsumer(Thread):
         Thread.__init__(self)
         self.distanceQueue = distanceQueue
         self.motorChannel = motorChannel
+        self.directionAvoidance = DirectionAvoidance(30)
 
     def run(self):
 
+        self.motorChannel.push(Direction.FORWARD)
+
         while True:
             distance = self.distanceQueue.get()
-            print 'distance ', self.distanceQueue.get(), 'cm'
-            if distance < 40:
-                self.motorChannel.push('left')
+            print 'distance: ', distance
+            if self.directionAvoidance.shouldStop(distance):
+                print 'stopping: ', distance
+                self.motorChannel.push(Direction.STOP)
+
+         
 
 
 
@@ -39,3 +46,14 @@ class SensorDataConsumerWrapper(object):
 
     def start(self):
         self.thread.start()
+
+
+
+class DirectionAvoidance(object):
+    def __init__(self, minDistance):
+        self.minDistance = minDistance
+             
+    def shouldStop(self, distance):
+        if distance <= self.minDistance:
+            return True
+        return False

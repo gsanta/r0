@@ -2,6 +2,15 @@ import RPi.GPIO as gpio
 import time
 import threading
 
+class Direction:
+    FORWARD = 0
+    RIGHT = 1
+    REVERSE = 2
+    LEFT = 3
+    STOP = 4
+
+
+
 class MotorPins(object):
 
     def __init__(self):
@@ -119,24 +128,32 @@ class MotorControlAutomation(threading.Thread):
         
     
     def run(self):
+        prevDirection = None
+        direction = Direction.FORWARD
 
         while True:
             time.sleep(2)
-            print 'forward'
+
+            tmp = self.move(direction, prevDirection)
+            prevDirection = direction
+            direction = tmp
+
+    def move(self, direction, prevDirection):
+        if direction == prevDirection:
+            return
+
+        if direction == Direction.FORWARD:
             self.motorControl.forward()
-           
-            message = self.motorChannel.top()
-            if message == 'left':
-                self.motorControl.stop()
-                print 'stop'
-            '''
-            message = self.motorChannel.top()
-            print 'message', message
-            if message == 'left':
-                self.motorControl.stop()
-                print 'stop'
-            self.motorControl.forward()
-            print 'forward'
-            time.sleep(1)
-            
-            '''
+            return Direction.FORWARD
+        elif direction == Direction.REVERSE:
+            self.motorControl.reverse()
+            return Direction.REVERSE
+        elif direction == Direction.LEFT:
+            self.motorControl.turn_left()
+            return Direction.LEFT
+        elif direction == Direction.RIGHT:
+            self.motorControl.turn_right()
+            return Direction.RIGHT
+        elif direction == Direction.STOP:
+            self.motorControl.stop_motor()
+            return Direction.STOP
