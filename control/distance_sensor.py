@@ -21,11 +21,11 @@ class DistanceSensor(Thread):
 
 class DistanceSensorWrapper(object):
 
-    def __init__(self, trigPin, echoPin, queue):
+    def __init__(self, trigPin, echoPin, dataProvider):
         self.trigPin = trigPin
         self.echoPin = echoPin
-        self.queue = queue
-        self.thread = DistanceSensor(self._initSensor, self._calcDistance, self.addDistance)
+        self.dataProvider = dataProvider
+        self.thread = DistanceSensor(self._initSensor, self._calcDistance, self._addDistance)
         self._setup()
 
     def _setup(self):

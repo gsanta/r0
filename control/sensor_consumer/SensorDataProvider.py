@@ -1,26 +1,17 @@
+import Queue
 
+class LastSensorDataProvider(object):
 
-class DistanceDataProvider(object):
-    
-    __init__(self, dataHandlerCommand):
-	self.dataHandlerCommand = dataHandlerCommand
-	self.prevData = None
+    __init__(self):
+	self.data = None
 
-    pushData(self, data):.
-        if data != self.prevData):
-	    self.prevData = prevData
-	    self.dataHandlerCommand.execute(data)
+    addData(self, data):
+        self.data = data
 
-    
-        
-
-class QueuedSensorDataProvider(object):
-
-    __init__(self, dataQueue):
-	self.dataQueue = dataQueue
-	self.distanceDataProvider = 
-
-    getDistanceDataProvider(self):
+    popData():
+        data = self.data
+        self.data = None
+        return data
 	
 
     
