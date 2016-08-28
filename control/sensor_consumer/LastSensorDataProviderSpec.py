@@ -16,6 +16,5 @@ class LastSensorDataProviderSpec(unittest.TestCase):
         data = provider.popData()
         self.assertTrue(data == None)
 
-
 if __name__ == '__main__':
     unittest.main()
