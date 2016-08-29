@@ -1,36 +1,29 @@
 import RPi.GPIO as GPIO
-import time
 from threading import Thread
 import Queue
 
 
 class DistanceSensor(object):
 
-    def __init__(self, trigPin, echoPin, dataProvider, threadFactory):
-        self.trigPin = trigPin
-        self.echoPin = echoPin
+    def __init__(self, distanceSensorIO, dataProvider, threadFactory, timer):
+        self.timer = timer
         self.dataProvider = dataProvider
         self.thread = threadFactory.getCalculatorThread(self._initSensor, self._calcDistance, self._addDistance)
-        self._setup()
+        self.distanceSensorIO = distanceSensorIO
+        self.distanceSensorIO.setup()
 
-    def _setup(self):
-        GPIO.setup(self.trigPin, GPIO.OUT)
-        GPIO.setup(self.echoPin, GPIO.IN)
-    
     def _initSensor(self):
-        GPIO.output(self.trigPin, False)
-        print "Waiting For Sensor To Settle"
-        time.sleep(2)
+        self.distanceSensorIO.triggerLow()
 
     def _calcDistance(self):
-        GPIO.output(self.trigPin, True)
-        time.sleep(0.00001)
-        GPIO.output(self.trigPin, False)
+        self.distanceSensorIO.triggerHigh()
+        timer.sleep(0.00001)
+        self.distanceSensorIO.triggerLow()
 
-        while GPIO.input(self.echoPin) == 0:
+        while self.distanceSensorIO.isEchoHigh() == False:  
             pulseStart = time.time()
 
-        while GPIO.input(self.echoPin) == 1:
+        while self.distanceSensorIO.isEchoHigh() == True:
             pulseEnd = time.time()
 
         pulseDuration = pulseEnd - pulseStart
@@ -40,7 +33,7 @@ class DistanceSensor(object):
         return distance;
 
     def _addDistance(self, distance):
-        dataProvider.addData(distance)
+        self.dataProvider.addData(distance)
 
     def startSensor(self):
         self.thread.start()

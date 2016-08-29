@@ -17,5 +17,4 @@ class DistanceSensorIO:
         self.gpioWrapper.sendLow(self.trigPin)
 
     def isEchoHigh(self):
-        print(self.echoPin)
         return self.gpioWrapper.receive(self.echoPin) == True
