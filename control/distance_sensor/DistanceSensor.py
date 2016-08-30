@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 from threading import Thread
+from ..threads import Timer
 import Queue
 
 
