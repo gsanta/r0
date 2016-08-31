@@ -51,5 +51,25 @@ class MotorIO:
         self.pwm.start(self.pwmValues[0])
 
 
+    def forward(self):
+        self.setupPins(True, False, True, False)
+
+    def reverse(self):
+        self.setupPins(False, True, False, True)
+
+    def turn_right(self):
+        self.setupPins(False, False, False, True)
+
+    def turn_left(self):
+        self.setupPins(False, True, False, False)
+
+    def stop_motor(self):
+        self.setupPins(False, False, False, False)
+
+    def setupPins(self, mrf, mrr, mlf, mlr):
+        gpio.output(self.motorPins.getMotorRightReverse(), mrr)
+        gpio.output(self.motorPins.getMotorRightForward(), mrf)
+        gpio.output(self.motorPins.getMotorLeftForward(), mlf)
+        gpio.output(self.motorPins.getMotorLeftReverse(), mlr)
 
 

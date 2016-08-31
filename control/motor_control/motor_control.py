@@ -1,6 +1,9 @@
 import RPi.GPIO as gpio
 import time
 import threading
+import MotorThread
+from MotorIO import MotorIO
+from MotorIO import MotorPins
 
 class Direction:
     FORWARD = 0
@@ -50,21 +53,10 @@ class MotorControl(object):
 
     def __init__(self, motorPins, pwmValues, pwmTimers):
         self.pwm = None
-        self.motorPins = motorPins
-        self.pwmValues = pwmValues
-        self.pwmTimers = pwmTimers
-        self._init()
-
-    def _init(self):
-        gpio.setmode(gpio.BOARD)
-       # gpio.setup(32, gpio.OUT)
-        gpio.setup(self.motorPins.getPWM(), gpio.OUT)
-        gpio.setup(self.motorPins.getMotorRightReverse(), gpio.OUT)
-        gpio.setup(self.motorPins.getMotorRightForward(), gpio.OUT)
-        gpio.setup(self.motorPins.getMotorLeftForward(), gpio.OUT)
-        gpio.setup(self.motorPins.getMotorLeftReverse(), gpio.OUT)
-        self.pwm = gpio.PWM(self.motorPins.getPWM(), 50)
-        self.pwm.start(self.pwmValues[0])
+        self.motorDataProvider = LastSensorDataProvider()
+        self.motorThread = MotorThread(self.motorDataProvider, self.start, 0.2)
+        self.motorIO = MotorIO(MotorPins())
+        self.motorThread.start()
 
     def start(self):
         for i in range(0, len(self.pwmValues)):
@@ -74,39 +66,31 @@ class MotorControl(object):
             time.sleep(self.pwmTimers[i])
     
     def forward(self):
-        self.setupPins(True, False, True, False)
-        self.t = threading.Thread(target=self.start)
-        self.t.start()
+        self.motorIO.forward()
+        self.motorDataProvider.addData(True)
         print 'forward'
-        #self.start()
 
     def reverse(self):
-        self.setupPins(False, True, False, True)
-        self.t = threading.Thread(target=self.start)
-        self.t.start()
+        self.motorIO.reverse()
+        self.motorDataProvider.addData(True)
         print 'reverse'
+        
 
     def turn_left(self):
-        self.setupPins(False, True, False, False)
-        self.t = threading.Thread(target=self.start)
-        self.t.start()
+        self.motorIO.turn_left()
+        self.motorDataProvider.addData(True)
         print 'turn_left'
 
     def turn_right(self):
-        self.setupPins(False, False, False, True)
-        self.t = threading.Thread(target=self.start)
-        self.t.start()
+        self.motorIO.turn_right()
+        self.motorDataProvider.addData(True)
         print 'turn_right'
 
     def stop_motor(self):
-        self.setupPins(False, False, False, False)
+        self.motorIO.stop_motor()
+        self.motorDataProvider.addData(True)
         print 'stop_motor'
 
-    def setupPins(self, mrf, mrr, mlf, mlr):
-        gpio.output(self.motorPins.getMotorRightReverse(), mrr)
-        gpio.output(self.motorPins.getMotorRightForward(), mrf)
-        gpio.output(self.motorPins.getMotorLeftForward(), mlf)
-        gpio.output(self.motorPins.getMotorLeftReverse(), mlr)
 
 class MotorControlAutomationWrapper(object):
 
