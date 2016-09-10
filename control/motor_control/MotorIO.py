@@ -66,6 +66,9 @@ class MotorIO:
     def stop_motor(self):
         self.setupPins(False, False, False, False)
 
+    def changeSpeed(self, dutyCycle):
+        self.pwm.ChangeDutyCycle(dutyCycle)
+
     def setupPins(self, mrf, mrr, mlf, mlr):
         gpio.output(self.motorPins.getMotorRightReverse(), mrr)
         gpio.output(self.motorPins.getMotorRightForward(), mrf)
