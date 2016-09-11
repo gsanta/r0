@@ -57,13 +57,13 @@ class MotorIO:
     def reverse(self):
         self.setupPins(False, True, False, True)
 
-    def turn_right(self):
+    def turnRight(self):
         self.setupPins(False, False, False, True)
 
-    def turn_left(self):
+    def turnLeft(self):
         self.setupPins(False, True, False, False)
 
-    def stop_motor(self):
+    def stopMotor(self):
         self.setupPins(False, False, False, False)
 
     def changeSpeed(self, dutyCycle):

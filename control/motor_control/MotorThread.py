@@ -1,17 +1,19 @@
-from ..sensor_consumer import LastSensorDataProvider
-from ..threads import Timer
-from threading import Thread
 
-class MotorThread(Thread):
-
-    def __init__(self, inputDataProvider, doWork, sleep):
+class MotorThread:
+    def __init__(self, createNewThread, timer):
+        self.createNewThread = createNewThread
+        self.timer = timer
+        
+    def start(self, inputDataProvider, runOnThread, sleep):
         self.inputDataProvider = inputDataProvider
-        self.doWork = doWork
+        self.runOnThread = runOnThread
         self.sleep = sleep
 
-    def run(self):
-        if self.inputDataProvider.popData != None:
+        self.createNewThread(self._run)
+
+    def _run(self):
+        if self.inputDataProvider.popData() != None:
             self.doWork()
 
-        Timer.sleep(self.sleep)
+        self.timer(self.sleep)
 
