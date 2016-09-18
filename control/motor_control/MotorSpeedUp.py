@@ -12,13 +12,13 @@ class SpeedUpValues():
         return self.sleepTimes
 
 class MotorSpeedUp():
-   def __init__(self, motorIO, speedUpValues, timer):
-	self.motorIO = motorIO
+    def __init__(self, motorIO, speedUpValues, timer):
+        self.motorIO = motorIO
         self.speedUpValues = speedUpValues
-	self.timer = timer
+        self.timer = timer
 
-   def speedUp(self):
-	for i in range(0, len(self.speedUpValues.getPWMValues())):
-	    self.motorIO.changeSpeed(self.speedUpValues.getPWMValues()[i])
+    def speedUp(self):
+        for i in range(0, len(self.speedUpValues.getPWMValues())):
+            self.motorIO.changeSpeed(self.speedUpValues.getPWMValues()[i])
             self.timer.sleep(self.speedUpValues.getSleepTimes()[i])
 	

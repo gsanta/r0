@@ -1,11 +1,9 @@
 
 class MotorControl(object):
 
-    def __init__(self, motorIO, sensorDataProvider, motorThread):
+    def __init__(self, motorIO, sensorDataProvider):
         self.motorDataProvider = sensorDataProvider 
-        self.motorThread = motorThread 
         self.motorIO = motorIO 
-        self.motorThread.start()
 
     def forward(self):
         self.motorIO.forward()
