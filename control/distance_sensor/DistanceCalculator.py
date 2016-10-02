@@ -1,10 +1,8 @@
-import RPi.GPIO as GPIO
-from threading import Thread
-from ..threads import Timer
-import Queue
+
 
 class DistanceCalculator:
-    
+    speedOfSound = 34300
+
     def __init__(self, distanceSensorIO, dataProvider, timer):
         self.distanceSensorIO = distanceSensorIO
         self.dataProvider = dataProvider
@@ -15,18 +13,17 @@ class DistanceCalculator:
 
     def calcDistance(self):
         self.distanceSensorIO.triggerHigh()
-        timer.sleep(0.00001)
+        self.timer.sleep(0.00001)
         self.distanceSensorIO.triggerLow()
 
-        while self.distanceSensorIO.isEchoHigh() == False:  
-            pulseStart = timer.time()
+        pulseStart = self.distanceSensorIO.getPulseStart()
+        pulseEnd = self.distanceSensorIO.getPulseEnd()
 
-        while self.distanceSensorIO.isEchoHigh() == True:
-            pulseEnd = timer.time()
-
-        pulseDuration = pulseEnd - pulseStart
-        distance = pulseDuration * 17150
+        distance = self.secondsToCentimeters(pulseEnd - pulseStart)
+        self.dataProvider.addData(distance)     
+    
+    def secondsToCentimeters(self, elapsedTime):
+        distance = elapsedTime * (DistanceCalculator.speedOfSound / 2)
         distance = round(distance, 2)
-        
-        self.dataProvider.addData(distance);
 
+        return distance
