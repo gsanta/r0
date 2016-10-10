@@ -1,5 +1,5 @@
 import unittest
-from PeriodicThread import PeriodicThread
+from PeriodicReaderThread import PeriodicReaderThread
 
 class CreateNewThreadStub:
     
@@ -21,22 +21,21 @@ class CreateNewThreadStub:
 class InputDataProviderStub:
     
     def __init__(self):
-        self.data = []
+        self.data = [1, 2, 3, 4, 5]
 
-    def addData(self, data):
-        self.data.append(data)
 
     def getData(self):
-        return self.data
+        return self.data.pop(0)
 
 class RunOnThreadStub:
     def __init__(self):
-        self.counts = 0
+        self.values = []
 
-    def runOnThread(self):
-        actVal = self.counts
-        self.counts += 1
-        return actVal
+    def runOnThread(self, data):
+        self.values.append(data)
+
+    def getData(self):
+        return self.values
 
 class TimerStub:
 
@@ -44,14 +43,7 @@ class TimerStub:
         pass
 
 
-class PeriodicThreadImpl(PeriodicThread):
-    def __init__(self, createNewThread, timer):
-        PeriodicThread.__init__(self, createNewThread, timer)
-
-    def _run(self):
-        self.inputDataProvider.addData('newData')
-
-class PeriodicThreadSpec(unittest.TestCase):
+class PeriodicReaderThreadSpec(unittest.TestCase):
 
     def testStart(self):
         createNewThread = CreateNewThreadStub(5)
@@ -59,10 +51,10 @@ class PeriodicThreadSpec(unittest.TestCase):
         inputDataProvider = InputDataProviderStub()
         runOnThread = RunOnThreadStub()
 
-        periodicThread = PeriodicThreadImpl(createNewThread.createNewThread, timer)
+        periodicThread = PeriodicReaderThread(createNewThread.createNewThread, timer)
         periodicThread.start(inputDataProvider, runOnThread.runOnThread, 2, createNewThread.isFinished)
-        self.assertTrue(len(inputDataProvider.getData()) == 5)
-        self.assertTrue(inputDataProvider.getData()[-1] == 'newData')
+        self.assertTrue(runOnThread.getData() == [1, 2, 3, 4, 5])
+
 
 if __name__ == '__main__':
     unittest.main()
