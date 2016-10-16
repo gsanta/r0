@@ -1,11 +1,9 @@
 
-
 class DistanceCalculator:
     speedOfSound = 34300
 
-    def __init__(self, distanceSensorIO, dataProvider, timer):
+    def __init__(self, distanceSensorIO, timer):
         self.distanceSensorIO = distanceSensorIO
-        self.dataProvider = dataProvider
         self.timer = timer
 
     def initSensor(self):
@@ -20,10 +18,10 @@ class DistanceCalculator:
         pulseEnd = self.distanceSensorIO.getPulseEnd()
 
         distance = self.secondsToCentimeters(pulseEnd - pulseStart)
-        self.dataProvider.addData(distance)     
+        
+        return distance
     
     def secondsToCentimeters(self, elapsedTime):
         distance = elapsedTime * (DistanceCalculator.speedOfSound / 2)
         distance = round(distance, 2)
-
         return distance
