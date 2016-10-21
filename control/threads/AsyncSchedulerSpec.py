@@ -27,9 +27,9 @@ class AsyncIOStub:
     def getSleeps():
         return self.sleeps
 
-class AsyncTaskRunnerSpec(unittest.TestCase):
+class AsyncSchdeulerSpec(unittest.TestCase):
 
-    def testRun(self):
+    def testSchedule(self):
         asyncTaskRunner = AsyncTaskRunner(AsyncIOStub())
         task = TaskStub()
         asyncTaskRunner.run(task, 2)
