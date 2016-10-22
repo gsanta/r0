@@ -3,9 +3,9 @@ import time
 
 class TimeBasedTurningTransition(KineticStateTransition):
     
-    def __init__(self, kineticContext, terminalState, terminalTime):
+    def __init__(self, kineticContext, terminalTime):
         KineticStateTransition.__init__(kineticContext)
-        self.terminalState = terminalState
+        self.terminalState = kineticContext.getState()
         self.terminalTime = terminalTime
         
     def doTransition(self):
