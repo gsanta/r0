@@ -4,7 +4,7 @@ class MotorMessage:
     def __init__(self, command):
         self.command = command
 
-    def getDirection(self):
+    def getCommand(self):
         return self.command
 
 class MotorMessageSubscriber:
@@ -16,7 +16,7 @@ class MotorMessageSubscriber:
 
     def notify(self):
         message = self.messagePublisher.getMessage()
-        if message.category not 'motion':
+        if message.category != 'motion':
             return
         
         motorMessage = MotorMessage(message.command)

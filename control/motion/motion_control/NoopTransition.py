@@ -1,10 +1,10 @@
 from KineticStateTransition import KineticStateTransition
 import time
 
-class TimeBasedTurningTransition(KineticStateTransition):
+class NoopTransition(KineticStateTransition):
     
     def __init__(self, kineticContext):
         KineticStateTransition.__init__(kineticContext)
         
     def doTransition(self):
-        self.kineticContext.setState(self.terminalState)
+        pass

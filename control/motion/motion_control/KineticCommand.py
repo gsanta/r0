@@ -1,3 +1,4 @@
+from KineticCommandState import KineticCommandState
 
 class KineticCommand():
     
