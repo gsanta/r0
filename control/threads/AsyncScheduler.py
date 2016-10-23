@@ -1,10 +1,7 @@
 
-async def schedule_delayed(task, period, firstRunDelayed):
-    if firstRunDelayed == False and task.isComplete() == False:
-        task.execute()
-
-    while task.isComplete() == False:
-        task.execute()
+async def schedule_delayed(task, delay, asyncio):
+    await asyncio.sleep(delay)
+    task.execute()
 
 class AsyncScheduler:
     

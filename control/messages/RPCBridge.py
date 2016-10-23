@@ -1,4 +1,5 @@
 import zerorpc
+import json
 
 class MessageHook:
 
@@ -6,6 +7,7 @@ class MessageHook:
         self.messagePublisher = messagePublisher
     
     def receive(self, message):
+	message = json.loads(message)
         self.messagePublisher.publish(message)
 
 class RPCBridge:
