@@ -1,3 +1,8 @@
+from KineticCommand import KineticCommand
+from KineticCommandState import KineticCommandState
+from NoopTransition import NoopTransition
+from TimeBasedTransition import TimeBasedTransition
+
 class KineticStateFactory:
 
     def __init__(self, motorControl, kineticContext):
@@ -9,10 +14,9 @@ class KineticStateFactory:
         kineticStateTransition = self._getKineticStateTransition(kineticCommandState)
         return KineticState(kineticCommand, kineticStateTransition)
 
-    def _getKineticStateTransition(kineticCommandState)
-        if kineticCommandState == KineticCommandState.FORWARD or
-            kineticCommandState == KineticCommandState.REVERSE:
-            return PrevStateTransition(self.kineticContext)
+    def _getKineticStateTransition(kineticCommandState):
+        if kineticCommandState == KineticCommandState.FORWARD or kineticCommandState == KineticCommandState.REVERSE:
+            return NoopTransition(self.kineticContext)
         else:
             endTime = time.time() + 2
-            return TimeBasedTurningTransition(self.kineticContext, endTime)
+            return TimeBasedTransition(self.kineticContext, endTime)

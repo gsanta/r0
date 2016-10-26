@@ -8,7 +8,6 @@ class TimeBasedTransition(KineticStateTransition):
         self.terminalState = kineticContext.getState()
         self.terminalTime = terminalTime
         
-    def doTransition(self):
-        
+    def doTransition(self):        
         if time.time() > self.terminalTime:
             self.kineticContext.setState(self.terminalState)
