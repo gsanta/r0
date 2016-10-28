@@ -3,8 +3,8 @@ class DistanceCalculator:
     speedOfSound = 34300
 
     def __init__(self, distanceSensorIO, timer):
-        self.distanceSensorIO = distanceSensorIO
         self.timer = timer
+        self.distanceSensorIO = distanceSensorIO
 
     def initSensor(self):
         self.distanceSensorIO.triggerLow()
