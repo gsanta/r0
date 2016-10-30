@@ -1,16 +1,15 @@
 import asyncio
 
 @asyncio.coroutine
-def schedule_delayed(task, delay, asyncio):
+def schedule_delayed(task, delay):
     yield from asyncio.sleep(delay)
     task.execute()
 
 class AsyncScheduler:
     
-    def __init__(self, asyncio, delay):
+    def __init__(self, delay):
         self.delay = delay
-        self.asyncio = asyncio
         
     def schedule(self, task):
-        self.asyncio.ensure_future(schedule_delayed(task, self.delay))
+        asyncio.async(schedule_delayed(task, self.delay))
         

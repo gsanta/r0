@@ -1,5 +1,8 @@
-from ..motion_control import KineticCommand, NoopTransition, TimeBasedTransition, KineticState
-from ..motion_control.KineticCommandState import KineticCommandState
+from .KineticCommand import KineticCommand
+from .NoopTransition import NoopTransition
+from .TimeBasedTransition import TimeBasedTransition
+from .KineticState import KineticState
+from .KineticCommandState import KineticCommandState
 import time
 
 class KineticStateFactory:

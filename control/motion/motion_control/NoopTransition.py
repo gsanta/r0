@@ -4,7 +4,7 @@ import time
 class NoopTransition(KineticStateTransition):
     
     def __init__(self, kineticContext):
-        KineticStateTransition.__init__(kineticContext)
+        KineticStateTransition.__init__(self, kineticContext)
         
     def doTransition(self):
         pass

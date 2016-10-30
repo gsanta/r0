@@ -11,7 +11,7 @@ class KineticContext:
         self.kineticState = newKineticState
 
     def getState(self):
-        return self.kineticState()
+        return self.kineticState
     
     def move(self):
         self.kineticState.move()
