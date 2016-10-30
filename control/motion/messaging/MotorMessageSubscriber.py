@@ -1,4 +1,4 @@
-from MotorMessage import MotorMessage
+from ..messaging import MotorMessage
 
 class MotorMessageSubscriber:
 

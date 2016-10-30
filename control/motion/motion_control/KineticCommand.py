@@ -1,4 +1,4 @@
-from KineticCommandState import KineticCommandState
+from ..motion_control.KineticCommandState import KineticCommandState
 
 class KineticCommand():
     

@@ -1,7 +1,6 @@
-from KineticCommand import KineticCommand
-from KineticCommandState import KineticCommandState
-from NoopTransition import NoopTransition
-from TimeBasedTransition import TimeBasedTransition
+from ..motion_control import KineticCommand, NoopTransition, TimeBasedTransition, KineticState
+from ..motion_control.KineticCommandState import KineticCommandState
+import time
 
 class KineticStateFactory:
 
@@ -14,7 +13,7 @@ class KineticStateFactory:
         kineticStateTransition = self._getKineticStateTransition(kineticCommandState)
         return KineticState(kineticCommand, kineticStateTransition)
 
-    def _getKineticStateTransition(kineticCommandState):
+    def _getKineticStateTransition(self, kineticCommandState):
         if kineticCommandState == KineticCommandState.FORWARD or kineticCommandState == KineticCommandState.REVERSE:
             return NoopTransition(self.kineticContext)
         else:

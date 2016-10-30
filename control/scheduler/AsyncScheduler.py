@@ -1,6 +1,8 @@
+import asyncio
 
-async def schedule_delayed(task, delay, asyncio):
-    await asyncio.sleep(delay)
+@asyncio.coroutine
+def schedule_delayed(task, delay, asyncio):
+    yield from asyncio.sleep(delay)
     task.execute()
 
 class AsyncScheduler:

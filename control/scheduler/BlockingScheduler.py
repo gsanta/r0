@@ -3,11 +3,11 @@ import concurrent.futures
 import sys
 import time
 
-
-async def schedule_blocking(blockingTask, executor, eventLoop):
+@asyncio.coroutine
+def schedule_blocking(blockingTask, executor, eventLoop):
     task = eventLoop.run_in_executor(executor, blockingTask)
     
-    completed, pending = await asyncio.wait([task])
+    completed, pending = yield from asyncio.wait([task])
     results = [t.result() for t in completed]
 
 class BlockingScheduler:
@@ -18,7 +18,7 @@ class BlockingScheduler:
         self.executor = executor
 
     def schedule(self, task):
-         self.asyncio.ensure_future(run_blocking(task, self.executor, self.eventLoop))
+         self.asyncio.ensure_future(schedule_blocking(task, self.executor, self.eventLoop))
 
 # def blocks():
 #     time.sleep(3)

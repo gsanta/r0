@@ -1,4 +1,4 @@
-from KineticStateTransition import KineticStateTransition
+from ..motion_control.KineticStateTransition import KineticStateTransition
 import time
 
 class NoopTransition(KineticStateTransition):

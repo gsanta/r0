@@ -1,4 +1,4 @@
-from MotorTask import MotorTask
+from ..driver import MotorTask
 
 class MotorDriver:
     """The entry point for driving the motor
