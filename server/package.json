@@ -2,9 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "zerorpc_example.js",
+  "main": "server.js",
   "dependencies": {
-    "socket.io-client": "^1.5.1"
+    "highland": "^2.10.1",
+    "socket.io-client": "^1.5.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {},
   "scripts": {
