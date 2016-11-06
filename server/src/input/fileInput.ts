@@ -31,31 +31,21 @@ export function parseSleep(tokens: string[]): Instruction | undefined {
 export function parseMotion(tokens: string[]): Instruction | undefined {
     var commands = ['FORWARD', 'REVERSE', 'TURN_LEFT', 'TURN_RIGHT', 'STOP'];
     if (_.indexOf(commands, _.first(tokens)) !== -1) {
-        return new Instruction('DELAY', _.rest(tokens));
+        return new Instruction(_.first(tokens), _.rest(tokens));
     }
 }
 
 export function parseInstruction(parsers: InstructionParser[], tokens: string[]): Instruction | undefined {
-    // return parsers.reduce(())
-    var instruction = _.compose(...parsers)(tokens);
+    var instruction = parsers.reduce((instr: Instruction | undefined, parser: InstructionParser) => {
+        if (!instr) {
+            return parser(tokens);
+        }
+        return instr;
+    }, undefined)
 
     if (!instruction) {
         throw new Error('Tokens could not be parsed, no matching parser');
     }
 
     return instruction;
-    // parsers
-    //
-    // if (_.first(instructions) === 'SLEEP') {
-    //     return {
-    //         category: 'delay',
-    //         value: _.last(instructions)
-    //     }
-    // }
-    //
-    // return {
-    //     category: 'motion',
-    //     command: _.first(instructions),
-    //     args: _.rest(instructions)
-    // }
 }

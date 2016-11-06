@@ -23,12 +23,17 @@ exports.parseSleep = parseSleep;
 function parseMotion(tokens) {
     var commands = ['FORWARD', 'REVERSE', 'TURN_LEFT', 'TURN_RIGHT', 'STOP'];
     if (_.indexOf(commands, _.first(tokens)) !== -1) {
-        return new Instruction('DELAY', _.rest(tokens));
+        return new Instruction(_.first(tokens), _.rest(tokens));
     }
 }
 exports.parseMotion = parseMotion;
 function parseInstruction(parsers, tokens) {
-    var instruction = _.compose.apply(_, parsers)(tokens);
+    var instruction = parsers.reduce(function (instr, parser) {
+        if (!instr) {
+            return parser(tokens);
+        }
+        return instr;
+    }, undefined);
     if (!instruction) {
         throw new Error('Tokens could not be parsed, no matching parser');
     }

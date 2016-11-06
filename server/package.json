@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "build/server.js",
   "dependencies": {
     "@types/highland": "^1.14.30",
     "@types/node": "^6.0.46",
