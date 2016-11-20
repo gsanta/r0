@@ -69,6 +69,11 @@ declare namespace __Folktale {
         <T1, T2, T3, T4, T5, R>(func: (p1: T1, p2: T2, p3: T3, p4: T4, p5: T5) => R): (p: T1) => (p: T2) => (p: T3) => (p: T4) => (p: T5) => R;
     }
 
+    interface partialize {
+        a: number;
+        (): number;
+    }
+
     // namespace Maybe {
     //     declare var Nothing: () => Maybe<undefined>;
     //     declare var Just: <T>(val: T) => Maybe<T>;

@@ -1,22 +1,5 @@
+import {Instruction} from './Instruction';
 import * as _ from 'underscore';
-
-export class Instruction {
-    private category: string;
-    private args: string[];
-
-    constructor(category: string, args: string[]) {
-        this.category = category;
-        this.args = args;
-    }
-
-    public getCategory(): string {
-        return this.category;
-    }
-
-    public getArgs(): string[] {
-        return this.args;
-    }
-}
 
 export interface InstructionParser {
     (tokens: string[]): Instruction | undefined;
@@ -36,12 +19,15 @@ export function parseMotion(tokens: string[]): Instruction | undefined {
 }
 
 export function parseInstruction(parsers: InstructionParser[], tokens: string[]): Instruction | undefined {
-    var instruction = parsers.reduce((instr: Instruction | undefined, parser: InstructionParser) => {
-        if (!instr) {
-            return parser(tokens);
-        }
-        return instr;
-    }, undefined)
+    var instruction = parsers.reduce(
+        (instr: Instruction | undefined, parser: InstructionParser) => {
+            if (!instr) {
+                return parser(tokens);
+            }
+            return instr;
+        },
+        undefined
+    );
 
     if (!instruction) {
         throw new Error('Tokens could not be parsed, no matching parser');
