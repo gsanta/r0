@@ -39,8 +39,8 @@ motorMessage = MotorMessage(KineticCommandState.FORWARD)
 motorMessageProcessor.process(motorMessage)
 motorMessage = MotorMessage(KineticCommandState.TURN_RIGHT)
 motorMessageProcessor.process(motorMessage)
-# socketIOServer = SocketIOServer(SocketIOEventHandler(messagePublisher))
-# socketIOServer.run()
+socketIOServer = SocketIOServer(SocketIOEventHandler(messagePublisher))
+socketIOServer.run()
 
 
 try:
