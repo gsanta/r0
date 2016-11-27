@@ -9,7 +9,7 @@ class MotorMessageSubscriber:
 
     def notify(self):
         message = self.messagePublisher.getMessage()
-        if message['category'] != 'motion':
+        if message['category'] != 'MOTION':
             return
         
         motorMessage = MotorMessage(message['command'])
