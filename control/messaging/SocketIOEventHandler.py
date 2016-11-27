@@ -15,5 +15,5 @@ class SocketIOEventHandler(Namespace):
 
     def on_message(self, data):
         print(data)
-        parsedData = json.loads(data)
-        self.messagePublisher.dispatch(parsedData)
+#         parsedData = json.loads(data)
+#         self.messagePublisher.dispatch(parsedData)
