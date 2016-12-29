@@ -8,6 +8,7 @@ from scheduler.Scheduler import Scheduler
 from scheduler.BlockingScheduler import BlockingScheduler
 from messaging.SocketIOServer import SocketIOServer
 from messaging.SocketIOEventHandler import SocketIOEventHandler
+from messaging.KafkaConsumerTask import KafkaConsumerTask
 from motion.messaging.MotorMessageSubscriber import MotorMessageSubscriber
 from motion.messaging.MotorMessage import MotorMessage
 from motion.messaging.MotorMessageProcessor import MotorMessageProcessor
@@ -29,21 +30,23 @@ scheduler = Scheduler()
 
 messagePublisher = MessagePublisher()
 kineticContext = KineticContext()
-
 motorDriver = MotorDriver(kineticContext, asyncScheduler)
 kineticStateFactory = KineticStateFactory(MotorControl(DummyMotorIO()), kineticContext)
 motorMessageProcessor = MotorMessageProcessor(motorDriver, kineticStateFactory)
 motorMessageSubscriber = MotorMessageSubscriber(messagePublisher, motorMessageProcessor)
+ 
+# motorMessage = MotorMessage(KineticCommandState.FORWARD)
+# motorMessageProcessor.process(motorMessage)
+# motorMessage = MotorMessage(KineticCommandState.TURN_RIGHT)
+# motorMessageProcessor.process(motorMessage)
 
-motorMessage = MotorMessage(KineticCommandState.FORWARD)
-motorMessageProcessor.process(motorMessage)
-motorMessage = MotorMessage(KineticCommandState.TURN_RIGHT)
-motorMessageProcessor.process(motorMessage)
-socketIOServer = SocketIOServer(SocketIOEventHandler(messagePublisher))
-socketIOServer.run()
-
+kafkaConsumerTask = KafkaConsumerTask(messagePublisher)
+blockingScheduler.schedule(kafkaConsumerTask)
+# socketIOServer = SocketIOServer(SocketIOEventHandler(messagePublisher))
+# socketIOServer.run()
 
 try:
+    print('run forever')
     event_loop.run_forever()    
 finally:
     event_loop.close()  

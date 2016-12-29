@@ -12,5 +12,7 @@ class MotorMessageSubscriber:
         if message['category'] != 'MOTION':
             return
         
+        print(message)
+        
         motorMessage = MotorMessage(message['direction'])
-        self.messageProcessor.process(motorMessage)
+#         self.messageProcessor.process(motorMessage)
