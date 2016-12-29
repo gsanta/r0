@@ -1,27 +1,35 @@
-import * as fs from 'fs';
-import * as highland from 'highland';
-import * as _ from 'underscore';
-import {parseInstruction, parseSleep, parseMotion, InstructionParser} from './instruction/parser';
-import {InstructionConsumer, InstructionConsumerArgs, consumeInstruction} from './instruction/consumer';
+declare var require: any;
 import {Instruction} from './instruction/Instruction';
-import {consumeNil, consumeDelay, consumeCommand} from './instruction/consumer';
-import * as http from 'http';
-import * as socketIO from 'socket.io-client';
 import {readFromFile} from './instruction/readFromFile';
+import * as fs from 'fs';
+var kafka = require('kafka-node'),
+    Producer = kafka.Producer,
+    client = new kafka.Client('localhost:2181'),
+    producer = new Producer(client);
 
-var socket = socketIO('http://localhost:5000');
-
-var inputFile = 'directions.txt';
-socket.on('connect', function (s: any) {
-    console.log('connection established');
-    readFromFile(inputFile, (instr: Instruction) => {
-        socket.send(instr);
-    });
+var inputFile = process.argv[2];//'directions.txt';
+console.log(inputFile);
+fs.readFile(inputFile, 'utf8', (err: any, data: any) => {
+  if (err) throw err;
+  console.log(data);
 });
-
-// var data = highland([inputFile]);
+// producer.on('ready', function() {
+//     console.log('connection established');
+//     readFromFile(inputFile, (instr: Instruction) => {
+//         // socket.send(instr);
 //
-// var consumeInstructionPartial = _.partial<InstructionConsumer[], InstructionConsumerArgs, void>(
-//     consumeInstruction,
-//     [consumeNil, consumeDelay, consumeCommand]
-// );
+//         let payloads = [
+//             {
+//                 topic: 'test',
+//                 messages: JSON.stringify(instr)
+//             }
+//         ];
+//         producer.send(payloads, function(err: any, data: any) {
+//             console.log(data);
+//         });
+//     });
+// });
+//
+// producer.on('error', function(err: any) {
+//     console.log(err);
+// });
